@@ -1,0 +1,12 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: git-repo
+  namespace: tekton-demo
+spec:
+  params:
+    - name: url
+      value: 'https://github.com/euanhume/java-hello-world-with-maven'
+    - name: revision
+      value: master
+  type: git

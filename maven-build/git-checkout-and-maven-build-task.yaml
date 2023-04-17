@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: git-checkout-and-maven-build
+spec:
+  workspaces:
+    - name: source
+  resources:
+    inputs:
+      - name: git-repo
+        type: git
+  steps:
+    - name: git-checkout
+      image: bitnami/git:latest
+      script: |
+        #!/bin/sh
+        git clone $(resources.inputs.git-repo.url) $(workspaces.source.path)
+        cd $(workspaces.source.path)
+        git checkout $(resources.inputs.git-repo.revision)
+    - name: maven-build
+      image: maven:3.8.1-openjdk-11
+      script: |
+        #!/bin/sh
+        cd $(workspaces.source.path)
+        mvn clean install

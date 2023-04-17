@@ -1,0 +1,21 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: git-checkout-maven-build-pipeline
+spec:
+  workspaces:
+    - name: source
+  resources:
+    - name: git-repo
+      type: git
+  tasks:
+    - name: git-checkout-and-maven-build
+      taskRef:
+        name: git-checkout-and-maven-build
+      resources:
+        inputs:
+          - name: git-repo
+            resource: git-repo
+      workspaces:
+        - name: source
+          workspace: source
